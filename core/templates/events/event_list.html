@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mx-auto py-8">
+  <h1 class="text-3xl font-bold mb-4">{{heading}}</h1>
+  
+  {% if results_count is not None %}
+    <p class="text-gray-600 mb-4">Found {{ results_count }} event{{ results_count|pluralize }}.</p>
+  {% endif %}  
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for event in events %}
+      <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+        <div class="p-6">
+          <h2 class="text-xl font-semibold mb-2">
+            <a href="{% url 'event_detail' event.id %}" class="hover:underline">
+              {{ event.name }}
+            </a>
+          </h2>
+          <p class="text-gray-600 text-sm mb-1">
+            <strong>Date:</strong> {{ event.date }} at {{ event.time }}
+          </p>
+          <p class="text-gray-600 text-sm mb-1">
+            <strong>Location:</strong> {{ event.location }}
+          </p>
+          <p class="text-gray-600 text-sm mb-1">
+            <strong>Category:</strong> {{ event.category.name }}
+          </p>
+          <p class="text-gray-600 text-sm">
+            <strong>Participants:</strong> {{ event.num_participants }}
+          </p>
+        </div>
+        <div class="px-6 py-4 bg-gray-50 flex justify-end space-x-2">
+          <a href="{% url 'event_update' event.id %}" class="text-yellow-500 hover:text-yellow-700">
+            Edit
+          </a>
+          <a href="{% url 'event_delete' event.id %}" class="text-red-500 hover:text-red-700">
+            Delete
+          </a>
+        </div>
+      </div>
+    {% empty %}
+      <p class="col-span-full text-center text-gray-500">No events found.</p>
+    {% endfor %}
+  </div>
+
+  <!-- search form -->
+  <form method="get" action="{% url 'event_search' %}" class="mt-10 mb-6 bg-gray-100/25 p-4 rounded-lg">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+      <!-- test search -->
+      <div class="md:col-span-2">
+        <label for="q" class="block font-medium mb-1"><h3>Search</h3></label>
+        <input type="text" name="q" id="q" placeholder="search by event name or category name"
+               value="{{ request.GET.q|default:'' }}"           
+               class="w-full border-2 border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-0 focus:border-2 focus:border-blue-300" />
+      </div>
+      
+      <!-- drom date -->
+      <div>
+        <label for="start_date" class="block text-sm font-medium text-gray-700 mb-1">From Date</label>
+        <input type="date" name="start_date" id="start_date"
+               value="{{ request.GET.start_date|default:'' }}"
+               class="w-full border-2 border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-0 focus:border-2 focus:border-blue-300" />
+      </div>
+      
+      <!-- to date -->
+      <div>
+        <label for="end_date" class="block text-sm font-medium text-gray-700 mb-1">To Date</label>
+        <input type="date" name="end_date" id="end_date"
+               value="{{ request.GET.end_date|default:'' }}"
+               class="w-full border-2 border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-0 focus:border-2 focus:border-blue-300" />
+      </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="flex gap-2">
+      <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-2 rounded-md">
+        Apply Filters
+      </button>
+      {% if has_filters %}
+        <a href="{% url 'event_list' %}" class="bg-gray-500 hover:bg-gray-600 text-white text-sm px-4 py-2 rounded-md">
+          Clear All
+        </a>
+      {% endif %}
+    </div>
+  </form>
+
+</div>
+{% endblock %}

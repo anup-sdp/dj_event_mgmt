@@ -1,0 +1,98 @@
+project process:
+used cmd:
+python -m venv myenv
+myenv\Scripts\activate -------------
+pip install django
+
+code .
+django-admin startproject eventmanager .
+python manage.py startapp core
+add "core" to installed apps in settings
+
+python manage.py runserver ---------
+ctrl+c
+
+write Category, Event, Participant models in core/models.py
+register to admin panel in admin.py
+
+for postgresql:
+pip install "psycopg[binary]"  --(had problem with: pip install psycopg-binary)
+python -c "import psycopg; print(psycopg.__version__)"  --(check)
+pip list
+
+write database configuration for postgresql in settings
+
+python manage.py makemigrations
+python manage.py migrate  --(ok, shows models as tables in pgAdmin)
+
+
+for tailwind v4:
+npm init -y   --(package.json created)
+
+# Core Tailwind CSS framework
+npm install tailwindcss@4.1
+# PostCSS and its CLI (for processing CSS)
+npm install -D postcss postcss-cli
+# Tailwind's PostCSS plugin (connects Tailwind to PostCSS)
+npm install -D @tailwindcss/postcss
+
+create postcss.config.js in project root:
+module.exports = {
+  plugins: [
+    require('@tailwindcss/postcss')({
+      content: [
+        "./templates/**/*.html",
+        "./**/templates/**/*.html", 
+        "./**/*.py"
+      ]
+    }),
+  ],
+}
+
+in static/css/tailwind-input.css write: @import "tailwindcss";
+add build script to package.json
+
+npm run build-css  # for a one-time build
+npm run watch-css  # automatic rebuilding when files change
+
+if without build script, run:
+npx postcss ./static/css/input.css -o ./static/css/output.css   ---------------------
+npx postcss ./static/css/input.css -o ./static/css/output.css --watch
+
+--- ok output.css created!
+
+
+Django Debug Toolbar, follow: https://django-debug-toolbar.readthedocs.io/en/latest/installation.html
+python -m pip install django-debug-toolbar
+
+
+for models.ImageField: pip install Pillow
+pip freeze > requirements.txt (write requirements.txt)
+
+
+
+write forms.py, views.py functions
+python manage.py createsuperuser
+anup-anup@example.com-mppg
+
+
+
+=======================
+github upload:
+git init
+git status
+git add .
+git status
+git commit -m "initial commit"
+git status
+github: create repo
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/anup-sdp/ecom1-fastkart-assignment.git
+git push -u origin main
+
+git add .
+git commit -m "final"
+git push -u origin main
+
+
