@@ -10,8 +10,12 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os
+from decouple import config
+import dj_database_url
 from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +31,6 @@ SECRET_KEY = 'django-insecure-3cw%v6*lwveu!)py#@o@%02@-83u18*xof3*&bw7)zylh6!@6*
 
 DEBUG = False  #
 
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -46,6 +49,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
 	"debug_toolbar.middleware.DebugToolbarMiddleware",  # ---
     'django.middleware.security.SecurityMiddleware',
+	'whitenoise.middleware.WhiteNoiseMiddleware',  # ---
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -84,16 +88,43 @@ WSGI_APPLICATION = 'eventmanager.wsgi.application'
 #     }
 # }
 
+# local postgresql
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'eventdb',
+#         'USER': 'postgres',
+#         'PASSWORD': 'mppg',
+#         'HOST': 'localhost', 
+# 		'PORT': '5432',
+#     }
+# }
+
+# for supabase
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'eventdb',
-        'USER': 'postgres',
-        'PASSWORD': 'mppg',
-        'HOST': 'localhost', 
-		'PORT': '5432',
+        'NAME': 'postgres', # default in supabase ?
+        'USER': 'postgres.vsczoxtbwkueitvqzbsb', # default in supabase ? .project_id
+        'PASSWORD': 'mppg', #os.getenv('DB_PASSWORD'),  # project password
+        'HOST': 'aws-0-ap-southeast-1.pooler.supabase.com',  # Supabase host, used from Session pooler
+        'PORT': '5432',
     }
 }
+
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=config('DATABASE_URL') # --------------------------
+#     )
+# }
+
+# DATABASES = {
+#     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+# }
+
+# DATABASES = {
+#     'default': dj_database_url.config(conn_max_age=600)
+# }
 
 
 # Password validation
@@ -130,9 +161,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']    
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -145,3 +177,7 @@ INTERNAL_IPS = ["127.0.0.1",]  # The Debug Toolbar is shown only if your IP addr
 # -----------------------------------------------------------------
 # STATIC_ROOT ?  only required in production (DEBUG = False)
 
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com']
+
+
+# python-dotenv package installed,  use os.getenv() to read values from .env, eg. 'HOST': os.getenv('DB_HOST', 'localhost'),

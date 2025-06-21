@@ -83,3 +83,6 @@ docs/_build/
 postcss.config.js
 package-lock.json
 package.json
+
+
+.env
