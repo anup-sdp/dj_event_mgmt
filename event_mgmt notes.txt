@@ -96,26 +96,3 @@ git commit -m "final"
 git push -u origin main
 
 ================
-supabase: anup30coc@gmail.com: pw:MPsupabase@1
-anup30coc@gmail.com's Org
-Project name: anup30coc@gmail.com's Project
--mppg
-
-Direct connection: (not ipv4 compatible)
-connection string: postgresql://postgres:[project-pasword]@db.vsczoxtbwkueitvqzbsb.supabase.co:5432/postgres
-connection string: postgresql://postgres:mppg@db.vsczoxtbwkueitvqzbsb.supabase.co:5432/postgres
-
-export DATABASE_URL=postgresql://postgres:mppg@db.vsczoxtbwkueitvqzbsb.supabase.co:5432/postgres
-run: psql postgresql://postgres:mppg@db.vsczoxtbwkueitvqzbsb.supabase.co:5432/postgres
-
-Transaction pooler:
-postgresql://postgres.vsczoxtbwkueitvqzbsb:[YOUR-PASSWORD]@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres
-run: psql postgresql://postgres.vsczoxtbwkueitvqzbsb:cmppg@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgre
-
-Session pooler: (use this ?)
-postgresql://postgres.vsczoxtbwkueitvqzbsb:[YOUR-PASSWORD]@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres
-run: psql postgresql://postgres.vsczoxtbwkueitvqzbsb:mppg@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres
-
-------------
-at: grok step 4 done.
-python manage.py loaddata data_backup.json (from dumped data)

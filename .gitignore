@@ -86,3 +86,8 @@ package.json
 
 
 .env
+render-supabase.txt
+backup_data.json
+data_backup.json
+
+git rm --cached backup_data.json data_backup.json
