@@ -1,3 +1,5 @@
+project structure:
+
 event_mgmt/
 ├── eventmanager/    # project
 │   ├── settings.py
@@ -10,10 +12,10 @@ event_mgmt/
 │   ├── urls.py
 │   ├── forms.py
 │   └── templates/
+│       ├── categories/
+│       ├── events/
+│       ├── participants/
 │       ├── base.html
-│       ├── event_list.html
-│       ├── event_detail.html
-│       ├── event_form.html
-│       ├── participant_form.html
-│       └── category_form.html
+│       ├── dashboard.html
+│       └── test-home.html
 └── manage.py
