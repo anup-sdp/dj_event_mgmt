@@ -1,4 +1,4 @@
-# at instructions 6:10
+# at Assignment Instructions 2:55
 """
 Django settings for eventmanager project.
 
@@ -11,7 +11,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
-from decouple import config
+from decouple import config  # decouople, dotenv, environ
 import dj_database_url
 from pathlib import Path
 from dotenv import load_dotenv
@@ -77,7 +77,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'eventmanager.wsgi.application'
 
 
-# Database
+# initial Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 # DATABASES = {
@@ -88,28 +88,28 @@ WSGI_APPLICATION = 'eventmanager.wsgi.application'
 # }
 
 # local postgresql
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'eventdb',
-#         'USER': 'postgres',
-#         'PASSWORD': 'mppg',
-#         'HOST': 'localhost', 
-# 		'PORT': '5432',
-#     }
-# }
-
-# for supabase
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres', # default in supabase ?
-        'USER': 'postgres.vsczoxtbwkueitvqzbsb', # default in supabase ? .project_id
-        'PASSWORD': os.getenv('DB_PASSWORD'),  # project password
-        'HOST': 'aws-0-ap-southeast-1.pooler.supabase.com',  # Supabase host, used from Session pooler
-        'PORT': '5432',
+        'NAME': 'eventdb2',  # --------- new created
+        'USER': 'postgres',
+        'PASSWORD': 'mppg',
+        'HOST': 'localhost', 
+		'PORT': '5432',
     }
 }
+
+# for supabase
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'postgres', # default in supabase ?
+#         'USER': 'postgres.vsczoxtbwkueitvqzbsb', # default in supabase ? .project_id
+#         'PASSWORD': os.getenv('DB_PASSWORD'),  # project password
+#         'HOST': 'aws-0-ap-southeast-1.pooler.supabase.com',  # Supabase host, used from Session pooler
+#         'PORT': '5432',
+#     }
+# }
 
 # DATABASES = {
 #     'default': dj_database_url.config(

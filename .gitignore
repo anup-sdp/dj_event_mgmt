@@ -31,6 +31,7 @@ media/
 # Virtual environment
 venv/
 myenv/
+venv311/
 ENV/
 env/
 .venv/

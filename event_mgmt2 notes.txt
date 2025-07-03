@@ -1,0 +1,33 @@
+project process:
+copied assignment 1 codes.
+deleted all migrations (still existes in assignment 1 folder if needed)
+reset database, create eventdb2 in pgAdmin
+
+in cmd:
+venv with python 3.11:
+"C:\Program Files\Python311\python.exe" -m venv venv311
+
+venv311\Scripts\activate -------------
+pip install -r requirements.txt
+
+git branch  --(show current branch)
+git branch assignment_02  --(create new branch)
+git checkout assignment_02  --(make it active branch)
+
+make change in models to include User.
+fix Participants code in views
+
+git add .
+git commit -m "a2_v0.1_todo:replace participants with users in views"
+git push -u origin assignment_02
+
+python manage.py makemigrations
+python manage.py migrate
+
+python manage.py createsuperuser
+
+python manage.py runserver ---------
+ctrl+c
+
+
+--- setup tailwind
