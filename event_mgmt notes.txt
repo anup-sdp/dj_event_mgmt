@@ -94,5 +94,32 @@ git push -u origin main
 git add .
 git commit -m "final"
 git push -u origin main
+--------------
+(git branch is at video 2.6 phitron sdp)
+git branch  --(show current branch)
+git branch assignment_01  --(create new branch)
+git checkout assignment_01  --(make it active branch)
+write code for this branch and commit to save them.
+
+git add .
+git commit -m "assignment_01_codes"
+git push -u origin assignment_01
+git checkout main  --(go back to main branch)
+git merge assignment_01  --(merge with main if assignment_01 branch is ok)
+git log --oneline  --(shows commit history) 
 
 ================
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,12 @@
+{
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.10",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1",
+    "tailwindcss": "4.1"
+  },
+  "scripts": {
+    "build-css": "postcss ./static/css/input.css -o ./static/css/output.css",
+    "watch-css": "postcss ./static/css/input.css -o ./static/css/output.css --watch"
+  }
+}
