@@ -33,4 +33,4 @@ ctrl+c
 python manage.py startapp users
 move user realted codes from core to users
 
---- setup tailwind
+--- setup tailwind 4
