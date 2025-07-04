@@ -1,8 +1,11 @@
-# fix Participant, participants
-from django.shortcuts import render
+# Participant, participants to User
+
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Category, Event, Participant
-from .forms import CategoryForm, EventForm, ParticipantForm
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
+from .models import Category, Event
+from .forms import CategoryForm, EventForm, UserRegistrationForm, UserUpdateForm
 from django.utils import timezone
 from datetime import date, datetime
 from django.db.models import Count, Q
@@ -22,12 +25,12 @@ def test_home(request):
 # category views -----------------------------------------------------------------
 
 def category_list(request):    
-    categories = Category.objects.annotate(num_events=Count('event'))
+    categories = Category.objects.annotate(num_events=Count('events'))
     return render(request, 'categories/category_list.html', {'categories': categories})
 
 def category_detail(request, pk):
     category = get_object_or_404(Category, pk=pk)    
-    events = Event.objects.filter(category=category).select_related('category').prefetch_related('participants').all()  #  order by date ?
+    events = Event.objects.filter(category=category).select_related('category').prefetch_related('participants').all()
     return render(request, 'categories/category_detail.html', {'category': category, 'events': events})
 
 def category_create(request):
@@ -74,7 +77,7 @@ def event_search(request):
     start_date = request.GET.get('start_date', '').strip()
     end_date = request.GET.get('end_date', '').strip()    
     
-    events = Event.objects.select_related('category').prefetch_related('participants').annotate(num_participants=Count('participants')).order_by('date')  # all events
+    events = Event.objects.select_related('category').prefetch_related('participants').annotate(num_participants=Count('participants')).order_by('date')
     
     filters_applied = []
    
@@ -88,7 +91,7 @@ def event_search(request):
             events = events.filter(date__gte=start_date_parsed)
             filters_applied.append(f'from {start_date_parsed.strftime("%B %d, %Y")}')
         except ValueError:
-            messages.error(request, "error: Invalid date input")  # Invalid date format
+            messages.error(request, "error: Invalid date input")
     
     if end_date:
         try:
@@ -123,7 +126,7 @@ def event_detail(request, pk):
 
 def event_create(request):
     if request.method == 'POST':
-        form = EventForm(request.POST)
+        form = EventForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             messages.success(request, "new event created")
@@ -134,7 +137,7 @@ def event_create(request):
 
 def event_update(request, pk):
     event = get_object_or_404(Event, pk=pk)
-    form = EventForm(request.POST or None, instance=event)
+    form = EventForm(request.POST or None, request.FILES or None, instance=event)
     if form.is_valid():
         form.save()
         messages.success(request, "event updated")
@@ -150,76 +153,73 @@ def event_delete(request, pk):
     return render(request, 'events/event_confirm_delete.html', {'event': event})
 
 
-
-# participant views -----------------------------------------------------------------
+# user/participant views -----------------------------------------------------------------
 
 def participant_list(request):
-    # Optionally add search by name or email using GET parameter 'q'
-    qs = Participant.objects.annotate(num_events=Count('events'))
+    # Search users by username, first_name, last_name, or email
+    qs = User.objects.annotate(num_events=Count('events'))
     query = request.GET.get('q')
     if query:
-        qs = qs.filter(Q(name__icontains=query) | Q(email__icontains=query))        
-    participants = qs
-    return render(request, 'participants/participant_list.html', {'participants': participants})
+        qs = qs.filter(Q(username__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query) | Q(email__icontains=query)) 
+    users = qs
+    return render(request, 'participants/participant_list.html', {'participants': users})
 
 def participant_detail(request, pk):
-    participant = get_object_or_404(Participant, pk=pk)
-    events = participant.events.select_related('category').all()
-    return render(request, 'participants/participant_detail.html', {'participant': participant, 'events': events})
+    user = get_object_or_404(User, pk=pk)
+    events = user.events.select_related('category').all()
+    return render(request, 'participants/participant_detail.html', {'user': user, 'events': events})
 
-def participant_create(request):
+def participant_register(request):
     if request.method == 'POST':
-        form = ParticipantForm(request.POST)
+        form = UserRegistrationForm(request.POST)
         if form.is_valid():
-            participant = form.save()
-            messages.success(request, "new participant created")
-            return redirect('participant_detail', pk=participant.pk)
+            user = form.save()
+            login(request, user)
+            messages.success(request, "Registration successful! You are now logged in.")
+            return redirect('participant_detail', pk=user.pk)
     else:
-        form = ParticipantForm()
-    return render(request, 'participants/participant_form.html', {'form': form, 'title': 'Create Participant'})
-
+        form = UserRegistrationForm()
+    return render(request, 'participants/participant_register.html', {'form': form, 'title': 'Register'})
 
 def participant_update(request, pk):
-    participant = get_object_or_404(Participant, pk=pk)
+    user = get_object_or_404(User, pk=pk)
     if request.method == 'POST':
-        form = ParticipantForm(request.POST, instance=participant)
+        form = UserUpdateForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
-            messages.success(request, "participant updated")
-            return redirect('participant_detail', pk=pk)
+            messages.success(request, "profile updated")
+            return redirect('user_detail', pk=pk)
     else:
-        form = ParticipantForm(instance=participant)
-    return render(request, 'participants/participant_form.html', {'form': form, 'title': 'Edit Participant'})
-
+        form = UserUpdateForm(instance=user)
+    return render(request, 'participants/participant_form.html', {'form': form, 'title': 'Edit Profile'})
 
 def participant_delete(request, pk):
-    participant = get_object_or_404(Participant, pk=pk)
+    user = get_object_or_404(User, pk=pk)
     if request.method == 'POST':
-        participant.delete()
-        messages.info(request, "participant deletd!")        
+        user.delete()
+        messages.info(request, "user deleted!")        
         return redirect('participant_list')
-    return render(request, 'participants/participant_confirm_delete.html', {'participant': participant})
+    return render(request, 'participants/participant_confirm_delete.html', {'participant': user})
 
 
 # Organizer Dashboard view  -----------------------------------------------------------------
 
-
 def dashboard(request):
-    #today = timezone.now().date()
     today = date.today()
     
     total_events = Event.objects.count()
     upcoming_events_count = Event.objects.filter(date__gt=today).count()
     past_events_count = Event.objects.filter(date__lt=today).count()
-    # total_participants = Participant.objects.count() # all participants, some may not have participated in events ?
-    # total_unique_participants = Participant.objects.filter(events__isnull=False).distinct().count()
-    # or, using aggregate:    
-    total_unique_participants = Event.objects.aggregate(unique_participants=Count('participants', distinct=True))['unique_participants']  # unpack vaue, aggregate returns a dictionary
+    
+    # Count unique participants across all events
+    total_unique_participants = Event.objects.aggregate(
+        unique_participants=Count('participants', distinct=True)
+    )['unique_participants']
                                     
-    filter_type = request.GET.get('filter')  # 'total', 'upcoming', 'past', or None
+    filter_type = request.GET.get('filter')
 
     if filter_type == 'total':
-        events_qs = Event.objects.select_related('category').select_related('category').prefetch_related('participants').all()
+        events_qs = Event.objects.select_related('category').prefetch_related('participants').all()
         heading = 'All Events'
     elif filter_type == 'upcoming':
         events_qs = Event.objects.filter(date__gt=today).select_related('category').prefetch_related('participants').all()

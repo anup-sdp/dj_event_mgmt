@@ -15,9 +15,12 @@ class Event(models.Model):
     date = models.DateField()
     time = models.TimeField()
     location = models.CharField(max_length=200)
-    category = models.ForeignKey(Category, related_name='event', on_delete=models.CASCADE)  # many to one
-    participants = models.ManyToManyField(User, related_name='events', blank=True)
-    # asset = models.ImageField(upload_to='events_asset', blank=True, null=True, default="events_asset/default_img.jpg")  # needed for assignment 2
+    category = models.ForeignKey(Category, related_name='events', on_delete=models.CASCADE)  # many to one # changed event to events --------------
+    participants = models.ManyToManyField(User, related_name='events', blank=True)  # M2M    
+    asset = models.ImageField(upload_to='events_asset', blank=True, null=True, default="events_asset/default_img.png")  # needed for assignment 2
+    
+    class Meta:
+        ordering = ['date', 'time']
 
     def __str__(self):
         return self.name

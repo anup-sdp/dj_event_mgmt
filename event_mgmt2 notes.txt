@@ -25,9 +25,12 @@ python manage.py makemigrations
 python manage.py migrate
 
 python manage.py createsuperuser
+admin>admin@example.com>pw:1234
 
 python manage.py runserver ---------
 ctrl+c
 
+python manage.py startapp users
+move user realted codes from core to users
 
 --- setup tailwind

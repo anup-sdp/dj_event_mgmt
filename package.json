@@ -1,0 +1,25 @@
+{
+  "name": "event_mgmt2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anup-sdp/dj_event_mgmt.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anup-sdp/dj_event_mgmt/issues"
+  },
+  "homepage": "https://github.com/anup-sdp/dj_event_mgmt#readme",
+  "description": "",
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.11",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1"
+  }
+}

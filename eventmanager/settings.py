@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 	"core",
+	"users",
 	"debug_toolbar", # ---
 ]
 
@@ -162,8 +163,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']    
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # for production
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -174,9 +178,28 @@ INTERNAL_IPS = ["127.0.0.1",]  # The Debug Toolbar is shown only if your IP addr
  
 
 # -----------------------------------------------------------------
-# STATIC_ROOT ?  only required in production (DEBUG = False)
+
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com']
 
 
 # python-dotenv package installed,  use os.getenv() to read values from .env, eg. 'HOST': os.getenv('DB_HOST', 'localhost'),
+
+# for sending email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')  # sender's email-id
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD') # password associated with above email-id/google app password (not the regular password)
+DEFAULT_FROM_EMAIL = "event_mgmt_app"
+
+"""
+to use image,
+install pillo, 
+use ImageField in model, 
+in views in post forms initialization include request.FILES, 
+in form.html in form tag use enctype = 'multipart/form-data',
+in settings write MEDIA_URL and MEDIA_ROOT
+in urls add them. urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+"""
