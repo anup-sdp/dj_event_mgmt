@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">	
-	<title>event management</title>
+	<title>{% block title %}event management{% endblock %}</title>
 	<!-- tailwind via play cdn: change -->
 	<!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> -->
 	<link rel="stylesheet" href="{% static 'css/output.css' %}">
@@ -60,8 +60,8 @@
 		{% block content %}
 		<!-- dynamic content -->
 		{% endblock %}
-		<footer class="bg-gray-100/25 text-gray-700 py-4 text-center mt-10 rounded-md"> <!-- use backdrop-blur ? -->
-			<p class="text-sm">&copy; 2025 Event Management App</p>
+		<footer class="bg-gray-100/25 text-gray-700 py-4 text-center mt-10 rounded-md">
+			<p class="text-sm">&copy; 2025 Event Management App.</p>
 		</footer>
 	</main>	
 	<script src="{% static 'javascript/script.js' %}"></script>
