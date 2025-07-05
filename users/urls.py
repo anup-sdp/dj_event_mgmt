@@ -11,6 +11,7 @@ urlpatterns = [
     path('participants/<int:pk>/update/', views.participant_update, name='participant_update'),
     path('participants/<int:pk>/delete/', views.participant_delete, name='participant_delete'),
 	path('sign-in/', views.sign_in, name='sign-in'), 
+	path('sign-out/', views.sign_out, name='sign-out'),
 	path('users-welcome-page/', views.welcome_page, name='users-welcome-page'),  # http://127.0.0.1:8000/users/welcome-page/
 	path('dashboard/', views.dashboard, name='dashboard'), # organizer dashboard  # http://127.0.0.1:8000/dashboard/
 ]

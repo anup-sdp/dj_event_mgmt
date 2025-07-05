@@ -12,6 +12,7 @@ from django.db.models import Count, Q
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate, get_user_model
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.decorators import login_required, user_passes_test
 
 
 def welcome_page(request):
@@ -34,12 +35,18 @@ def sign_in(request):
     #return HttpResponse("<h1>test HttpResponse for login</h1>")
     return render(request, 'participants/sign-in.html')
 
+@login_required
+def sign_out(request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect('sign-in')
+
 
 # user/participant views -----------------------------------------------------------------
 
 def participant_list(request):
     # Search users by username, first_name, last_name, or email
-    qs = User.objects.annotate(num_events=Count('events'))
+    qs = User.objects.annotate(num_events=Count('rsvp_events'))  # events to rsvp_events ? ----------------------------------------
     query = request.GET.get('q')
     if query:
         qs = qs.filter(Q(username__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query) | Q(email__icontains=query)) 

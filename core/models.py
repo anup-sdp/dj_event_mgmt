@@ -15,8 +15,8 @@ class Event(models.Model):
     date = models.DateField()
     time = models.TimeField()
     location = models.CharField(max_length=200)
-    category = models.ForeignKey(Category, related_name='events', on_delete=models.CASCADE)  # many to one # changed event to events --------------
-    participants = models.ManyToManyField(User, related_name='events', blank=True)  # M2M    
+    category = models.ForeignKey(Category, related_name='events', on_delete=models.CASCADE)  # many to one # changed event to events  --------------
+    participants = models.ManyToManyField(User, related_name='rsvp_events', blank=True)  # M2M    # changed events to resvp_events
     asset = models.ImageField(upload_to='events_asset', blank=True, null=True, default="events_asset/default_img.png")  # needed for assignment 2
     
     class Meta:

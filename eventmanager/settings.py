@@ -202,6 +202,10 @@ FRONTEND_URL = config('FRONTEND_URL', default='http://127.0.0.1:8000')  # develo
 # FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:3000')
 
 
+AUTH_USER_MODEL = 'auth.User'
+
+
+
 """
 to use image,
 install pillo, 

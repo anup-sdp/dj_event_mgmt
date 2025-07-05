@@ -1,4 +1,5 @@
 <!-- without using forms.py, as module 10 -->
+<!-- this files uses raw css, no tailwind -->
 {% extends "base.html" %}
 {% block title %}event management - login{% endblock %}
 {% block content %}
@@ -96,9 +97,7 @@
 					<hr>
 					<ul>
 						{% for message in messages %}
-							<li>
-								{{ message }}
-							</li>
+							<li>{{ message }}</li>
 						{% endfor %}
 					</ul>
 				{% endif %}

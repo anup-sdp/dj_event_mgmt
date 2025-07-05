@@ -75,8 +75,8 @@ class UserRegistrationForm(StyledFormMixin, UserCreationForm):
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['password1'].label = 'Password'
-        self.fields['password2'].label = 'Confirm Password'
+        #self.fields['password1'].label = 'Password'  # ----
+        #self.fields['password2'].label = 'Confirm Password'    # ---- alternately done in StyledFormMixin
         # Customize field labels and help text
         self.fields['username'].help_text = None
         self.fields['password1'].help_text = None

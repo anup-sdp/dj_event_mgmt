@@ -30,7 +30,7 @@ def send_activation_email(sender, instance, created, **kwargs):
 @receiver(post_save, sender=OurUser)
 def assign_role(sender, instance, created, **kwargs):
     if created:
-        user_group, created = Group.objects.get_or_create(name='User')  # returns tuple
+        user_group, created = Group.objects.get_or_create(name='Participant')  # returns tuple
         instance.groups.add(user_group)
         #instance.save()  # no need to call, here—the m2m add() is enough
         # Avoid calling save() inside a post_save
