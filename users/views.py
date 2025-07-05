@@ -108,9 +108,20 @@ def participant_delete(request, pk):
     return render(request, 'participants/participant_confirm_delete.html', {'participant': user})
 
 
-# Organizer Dashboard view  -----------------------------------------------------------------
+# Dashboard views -----------------------------------------------------------------
 
-def dashboard(request):
+def admin_dashboard(request):
+    # codes
+    context = None
+    return render(request, 'admin_dashboard.html', context)
+
+def participant_dashboard(request):
+    # codes
+    context = None
+    return render(request, 'participant_dashboard.html', context)
+
+
+def organizer_dashboard(request):
     today = date.today()
     
     total_events = Event.objects.count()
@@ -153,4 +164,4 @@ def dashboard(request):
         'heading': heading,
         'filter_type': filter_type,
     }
-    return render(request, 'dashboard.html', context)
+    return render(request, 'organizer_dashboard.html', context)

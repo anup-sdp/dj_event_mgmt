@@ -11,13 +11,28 @@
 	<link rel="stylesheet" href="{% static 'css/style.css' %}">	
 </head>
 <body>
+	{% comment %}Set dashboard_url based on user's group{% endcomment %}		
+	{% if request.user.is_authenticated and request.user.groups.first %}		
+	{% if request.user.groups.first.name == 'Admin' %}
+		{% url 'admin-dashboard' as dashboard_url %}
+	{% elif request.user.groups.first.name == 'Organizer' %}
+		{% url 'organizer-dashboard' as dashboard_url %}
+	{% elif request.user.groups.first.name == 'Participant' %}
+		{% url 'participant-dashboard' as dashboard_url %}
+	{% else %}		
+		{% url 'no-permission' as dashboard_url %}	
+	{% endif %}
+	{% else %}
+		{% url 'no-permission' as dashboard_url %}
+	{% endif %}
 	<main class="max-w-[1440px] min-h-screen mx-auto mt-3 p-3">
 		<!-- header/nav -->
 		<header class="bg-gray-100/25 rounded-md p-3"> <!-- css eqivalent = justify-content: space-between, align-items: center -->
 			<nav class="flex justify-between items-center">
 				<h1 class="text-2xl font-semibold">Event Management</h1>
-				<div class="hidden md:flex items-center gap-x-2">
-					<a href="{% url 'dashboard' %}" class="px-3 py-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-full text-sm">Dashboard</a>  <!-- which dashboard -->
+				<div class="hidden lg:flex items-center gap-x-2">
+					<!-- <a href="{% url 'organizer-dashboard' %}" class="px-3 py-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-full text-sm">Dashboard</a> --> <!-- which one -->
+					<a href="{{dashboard_url}}" class="px-3 py-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-full text-sm">Dashboard</a> 
 					<a href="{% url 'category_list' %}" class="px-3 py-1 bg-orange-400 hover:bg-orange-500 text-white font-semibold rounded-full text-sm">Categories</a>
 					<a href="{% url 'event_list' %}" class="px-3 py-1 bg-teal-400 hover:bg-teal-500 text-white font-semibold rounded-full text-sm">Events</a>
 					<a href="{% url 'participant_list' %}" class="px-3 py-1 bg-sky-400 hover:bg-sky-500 text-white font-semibold rounded-full text-sm">Participants</a>
@@ -27,31 +42,34 @@
 						<div>
 							<form method="post" action="{% url 'sign-out' %}">
 								{% csrf_token %}
-								<button class="block px-2 py-1 bg-blue-400 hover:bg-blue-500 text-white text-sm ">Logout</button>
+								<button class="block px-2 py-1 bg-blue-400 hover:bg-blue-500 text-white text-sm rounded-md">Logout</button>
 							</form>
 						</div>
 					{% else %}
 						<div class="flex gap-2">
-							<a href="{% url 'sign-in' %}" class="hidden md:block bg-blue-400 hover:bg-blue-500 text-white text-sm px-2 py-1 rounded-md">Sign In</a>
-							<a href="{% url 'participant_create' %}" class="hidden md:block bg-blue-400 hover:bg-blue-500 text-white text-sm px-2 py-1 rounded-md">Sign Up</a>												
+							<a href="{% url 'sign-in' %}" class="hidden lg:block bg-blue-400 hover:bg-blue-500 text-white text-sm px-2 py-1 rounded-md">Sign In</a>
+							<a href="{% url 'participant_create' %}" class="hidden lg:block bg-blue-400 hover:bg-blue-500 text-white text-sm px-2 py-1 rounded-md">Sign Up</a>
 						</div>
-					{% endif %}
-					<button onclick="openDialog()" class="w-10 h-10 hidden md:block bg-gray-100/25 rounded-full">🎉</button>	<!-- celebrate button text-xs text-sm-->
+					{% endif %}					
 				</div>
+				
 				<div class="flex justify-between items-center gap-x-2">
+					<div class="flex justify-between items-center gap-x-2">
 					<!-- menu button, js in script.js -->
-					<div class="md:hidden ml-4">
-						<button id="menu-toggle" class="text-gray-600 hover:text-gray-800 focus:outline-none">
-							<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">              
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-							</svg>
-						</button>
-					</div>					
-				</div>				
-			</nav>
+						<div class="lg:hidden m-2">
+							<button id="menu-toggle" class="text-gray-600 hover:text-gray-800 focus:outline-none">
+								<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+								</svg>
+							</button>
+						</div>					
+					</div>
+					<button onclick="openDialog()" class="w-10 h-10 bg-gray-100/25 rounded-full">🎉</button>  <!-- celebrate button text-xs text-sm-->
+				</div>						
+			</nav>			
 			<!-- mobile menu: change content -->
-			<div id="mobile-menu" class="hidden md:hidden mt-4 gap-2 m-2">
-				<a href="{% url 'dashboard' %}" class="px-3 py-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-full text-sm">Dashboard</a> <!-- which dashboard -->
+			<div id="mobile-menu" class="hidden lg:hidden mt-4 gap-2 m-2">
+				<a href="{{dashboard_url}}" class="px-3 py-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-full text-sm">Dashboard</a> <!-- which dashboard -->
 				<a href="{% url 'category_list' %}" class="px-3 py-1 bg-orange-400 hover:bg-orange-500 text-white font-semibold rounded-full text-sm">Categories</a>
 				<a href="{% url 'event_list' %}" class="px-3 py-1 bg-teal-400 hover:bg-teal-500 text-white font-semibold rounded-full text-sm">Events</a>
 				<a href="{% url 'participant_list' %}" class="px-3 py-1 bg-sky-400 hover:bg-sky-500 text-white font-semibold rounded-full text-sm">Participants</a>
@@ -66,21 +84,23 @@
 					{% else %}
 						<div class="flex gap-2">
 							<a href="{% url 'sign-in' %}" class="bg-blue-400 hover:bg-blue-500 text-white text-sm px-2 py-1 rounded-md ">Sign In</a>
-							<a href="{% url 'participant_create' %}" class="bg-blue-400 hover:bg-blue-500 text-white text-sm px-2 py-1 rounded-md ">Sign Up</a>												
+							<a href="{% url 'participant_create' %}" class="bg-blue-400 hover:bg-blue-500 text-white text-sm px-2 py-1 rounded-md ">Sign Up</a>
 						</div>
-					{% endif %}					
+					{% endif %}
 				</div>
-				<button onclick="openDialog()" class="w-10 h-10 bg-gray-100/25 rounded-full">🎉</button>	<!-- celebrate button text-xs text-sm-->
 			</div>
 		</header>
-
-		<dialog id="dialog1" class="p-3 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 rounded-xl">
-			<a href="{% url 'admin:index' %}"><button class="bg-blue-400/25 px-2 py-1 rounded-4xl">go to admin page</button></a>
-			<!-- <button action="{% url 'admin:index' %}">go to admin page</button> -->
+		<!-- dialog box -->
+		<dialog id="dialog1" class="p-3 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 rounded-xl">			
+			<div class="flex flex-col gap-2 mb-4">
+				<!-- <button action="{% url 'admin:index' %}">go to admin page</button> -->	
+				<a href="{% url 'admin:index' %}"><button class="bg-blue-400/25 px-2 py-1 rounded-4xl">go to admin page</button></a>
+				<a href="{% url 'users-welcome-page' %}"><button class="bg-blue-400/25 px-2 py-1 rounded-4xl">go to welcome page</button></a>
+			</div>
 			<p>Developed by: Anup Barua</p>
 			<p>country: Bangladesh</p>
 			<p>email: anup30coc@gmail.com</p>			
-			<button onclick="closeDialog()" class="bg-blue-400/25 px-2 py-1 rounded-4xl">close</button>
+			<button onclick="closeDialog()" class="bg-blue-400/25 px-2 py-1 rounded-4xl m-2">close</button>
 		</dialog>
 
 		<!-- messages -->
@@ -116,4 +136,24 @@
 	<script src="{% static 'javascript/script.js' %}"></script> <!-- custom javascript -->
 </body>
 </html>
-<!--  -->
+<!-- no-permission -->
+
+#-----------------
+
+#----------------------------
+
+is this eck ok now:
+{% if request.user.is_authenticated and request.user.groups.first %}		
+	{% if request.user.groups.first.name == 'Admin' %}
+		{% url 'admin-dashboard' as dashboard_url %}
+	{% elif request.user.groups.first.name == 'Organizer' %}
+		{% url 'organizer-dashboard' as dashboard_url %}
+	{% elif request.user.groups.first.name == 'Participant' %}
+		{% url 'participant-dashboard' as dashboard_url %}
+	{% else %}		
+		{% url 'no-permission' as dashboard_url %}	
+	{% endif %}
+{% else %}
+	{% url 'no-permission' as dashboard_url %}
+{% endif %}
+

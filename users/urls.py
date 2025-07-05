@@ -13,6 +13,8 @@ urlpatterns = [
 	path('sign-in/', views.sign_in, name='sign-in'), 
 	path('sign-out/', views.sign_out, name='sign-out'),
 	path('users-welcome-page/', views.welcome_page, name='users-welcome-page'),  # http://127.0.0.1:8000/users/welcome-page/
-	path('dashboard/', views.dashboard, name='dashboard'), # organizer dashboard  # http://127.0.0.1:8000/dashboard/
+	path('organizer-dashboard/', views.organizer_dashboard, name='organizer-dashboard'), # organizer dashboard  # http://127.0.0.1:8000/users/organizer-dashboard/
+	path('admin-dashboard/', views.admin_dashboard, name='admin-dashboard'),
+	path('participant-dashboard/', views.participant_dashboard, name='participant-dashboard'),
 ]
 # users/

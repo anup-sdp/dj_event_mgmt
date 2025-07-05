@@ -22,6 +22,10 @@ def test_home(request):
     return render(request, "test-home.html", context)
 
 
+def no_permission(request):
+    return render(request, 'no_permission.html')
+
+
 # category views -----------------------------------------------------------------
 
 def category_list(request):    
