@@ -9,6 +9,7 @@ urlpatterns = [
 	path('activate/<int:user_id>/<str:token>/', views.activate_user),  # email activation
     path('participants/<int:pk>/', views.participant_detail, name='participant_detail'),
     path('participants/<int:pk>/update/', views.participant_update, name='participant_update'),
+	path('participants/<int:user_id>/update-role/', views.update_participant_role, name='update_participant_role'),
     path('participants/<int:pk>/delete/', views.participant_delete, name='participant_delete'),
 	path('sign-in/', views.sign_in, name='sign-in'), 
 	path('sign-out/', views.sign_out, name='sign-out'),

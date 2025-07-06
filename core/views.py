@@ -10,6 +10,7 @@ from django.utils import timezone
 from datetime import date, datetime
 from django.db.models import Count, Q
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def test_home(request):
@@ -74,6 +75,31 @@ def category_delete(request, pk):
 def event_list(request):    
     events = Event.objects.select_related('category').prefetch_related('participants').annotate(num_participants=Count('participants')).order_by('date')
     return render(request, 'events/event_list.html', {'events': events, 'heading':'All Events'})
+
+@login_required
+def event_add_rsvp(request, event_id):    
+    event = get_object_or_404(Event, id=event_id)    
+    if event.participants.filter(id=request.user.id ).exists():
+        messages.info(request, "You are already registered for this event.")
+    else:        
+        event.participants.add(request.user.id)
+        messages.success(request, "Successfully registered for the event!")    
+    
+    redirect_url = request.META.get('HTTP_REFERER', '/')
+    return redirect(redirect_url) # redirect back to the previous page   
+
+
+@login_required
+def event_remove_rsvp(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    
+    if event.participants.filter(id=request.user.id).exists():
+        event.participants.remove(request.user)
+        messages.success(request, "Successfully unregistered from the event")
+    else:
+        messages.info(request, "You're not registered for this event")
+    
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
 def event_search(request):

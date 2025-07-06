@@ -32,10 +32,9 @@
 				<h1 class="text-2xl font-semibold">Event Management</h1>
 				<div class="hidden lg:flex items-center gap-x-2">
 					<!-- <a href="{% url 'organizer-dashboard' %}" class="px-3 py-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-full text-sm">Dashboard</a> --> <!-- which one -->
-					<a href="{{dashboard_url}}" class="px-3 py-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-full text-sm">Dashboard</a> 
-					<a href="{% url 'category_list' %}" class="px-3 py-1 bg-orange-400 hover:bg-orange-500 text-white font-semibold rounded-full text-sm">Categories</a>
-					<a href="{% url 'event_list' %}" class="px-3 py-1 bg-teal-400 hover:bg-teal-500 text-white font-semibold rounded-full text-sm">Events</a>
-					<a href="{% url 'participant_list' %}" class="px-3 py-1 bg-sky-400 hover:bg-sky-500 text-white font-semibold rounded-full text-sm">Participants</a>
+					<a href="{{dashboard_url}}" class="px-3 py-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-full text-sm">My Dashboard</a> 
+					<a href="{% url 'category_list' %}" class="px-3 py-1 bg-orange-400 hover:bg-orange-500 text-white font-semibold rounded-full text-sm">All Categories</a>
+					<a href="{% url 'event_list' %}" class="px-3 py-1 bg-teal-400 hover:bg-teal-500 text-white font-semibold rounded-full text-sm">All Events</a>					
 				</div>
 				<div class="flex justify-between items-center gap-x-2">
 					{% if request.user.is_authenticated %}
@@ -69,10 +68,9 @@
 			</nav>			
 			<!-- mobile menu: change content -->
 			<div id="mobile-menu" class="hidden lg:hidden mt-4 gap-2 m-2">
-				<a href="{{dashboard_url}}" class="px-3 py-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-full text-sm">Dashboard</a> <!-- which dashboard -->
-				<a href="{% url 'category_list' %}" class="px-3 py-1 bg-orange-400 hover:bg-orange-500 text-white font-semibold rounded-full text-sm">Categories</a>
-				<a href="{% url 'event_list' %}" class="px-3 py-1 bg-teal-400 hover:bg-teal-500 text-white font-semibold rounded-full text-sm">Events</a>
-				<a href="{% url 'participant_list' %}" class="px-3 py-1 bg-sky-400 hover:bg-sky-500 text-white font-semibold rounded-full text-sm">Participants</a>
+				<a href="{{dashboard_url}}" class="px-3 py-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-full text-sm">My Dashboard</a> <!-- which dashboard -->
+				<a href="{% url 'category_list' %}" class="px-3 py-1 bg-orange-400 hover:bg-orange-500 text-white font-semibold rounded-full text-sm">All Categories</a>
+				<a href="{% url 'event_list' %}" class="px-3 py-1 bg-teal-400 hover:bg-teal-500 text-white font-semibold rounded-full text-sm">All Events</a>				
 				<div class="flex justify-between items-center gap-2 m-2">
 					{% if request.user.is_authenticated %}
 						<div>
@@ -137,23 +135,3 @@
 </body>
 </html>
 <!-- no-permission -->
-
-#-----------------
-
-#----------------------------
-
-is this eck ok now:
-{% if request.user.is_authenticated and request.user.groups.first %}		
-	{% if request.user.groups.first.name == 'Admin' %}
-		{% url 'admin-dashboard' as dashboard_url %}
-	{% elif request.user.groups.first.name == 'Organizer' %}
-		{% url 'organizer-dashboard' as dashboard_url %}
-	{% elif request.user.groups.first.name == 'Participant' %}
-		{% url 'participant-dashboard' as dashboard_url %}
-	{% else %}		
-		{% url 'no-permission' as dashboard_url %}	
-	{% endif %}
-{% else %}
-	{% url 'no-permission' as dashboard_url %}
-{% endif %}
-

@@ -1,6 +1,85 @@
 {% extends "base.html" %}
 {% block title %}admin dashboard{% endblock %}
 {% block content %}
-<h1>Admin Dashboard</h1>
+<section>
+	<h1 class="font-semibold">Admin Dashboard</h1>
+	<div class="mt-4 mb-4">
+		<a href="{% url 'participant_list' %}" class="px-3 py-1 bg-sky-400 hover:bg-sky-500 text-white font-semibold rounded-full text-sm">All Participants</a>
+		<span>: view/edit user info, change group.</span>
+	</div>
 
+	<!-- below is similar to organizer dashboard -->
+	<!-- Stats Grid -->
+	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+	  <!-- Total Participants  -->
+	  <div class="bg-green-100 p-4 rounded-md shadow text-center">
+	    <p class="text-gray-600">Total Participants</p>
+	    <p class="text-2xl font-semibold">{{ stats.total_participants }}</p>
+	  </div>
+	  <!-- Total Events (clickable) -->
+	  <a href="?filter=total">
+	    <div class="p-4 rounded-md shadow text-center {% if filter_type == 'total' %}bg-blue-200{% else %}bg-indigo-100{% endif %}">
+	      <p class="text-gray-600">Total Events</p>
+	      <p class="text-2xl font-semibold">{{ stats.total_events }}</p>
+	    </div>
+	  </a>
+	  <!-- Upcoming Events (clickable) -->
+	  <a href="?filter=upcoming">    
+	    <div class="p-4 rounded-md shadow text-center {% if filter_type == 'upcoming' %}bg-blue-200{% else %}bg-indigo-100{% endif %}">
+	      <p class="text-gray-600">Upcoming Events</p>
+	      <p class="text-2xl font-semibold">{{ stats.upcoming_events }}</p>
+	    </div>
+	  </a>
+	  <!-- Past Events (clickable) -->
+	  <a href="?filter=past">
+	    <div class="p-4 rounded-md shadow text-center {% if filter_type == 'past' %}bg-blue-200{% else %}bg-indigo-100{% endif %}">
+	      <p class="text-gray-600">Past Events</p>
+	      <p class="text-2xl font-semibold">{{ stats.past_events }}</p>
+	    </div>
+	  </a>
+	</div>
+	<!-- Heading for current listing -->
+	<div class="mb-4">
+	  <h2 class="text-2xl font-semibold">{{ heading }}:</h2>
+	</div>
+	<!-- Event Listing -->
+	{% if events %}
+	<div class="overflow-x-auto">
+	  <table class="min-w-full bg-white shadow rounded-lg">
+	    <thead class="bg-gray-100">
+	      <tr>
+	        <th class="px-4 py-2 text-left rounded-tl-lg">Name</th>
+	        <th class="px-4 py-2 text-left">Date & Time</th>
+	        <th class="px-4 py-2 text-left">Location</th>
+	        <th class="px-4 py-2 text-left">Category</th>
+	        <th class="px-4 py-2 text-left rounded-tr-lg">Participants</th>
+	      </tr>
+	    </thead>
+	    <tbody>
+	      {% for event in events %}
+	      <tr class="border-t border-gray-200">
+	        <td class="px-4 py-3">
+	          <a href="{% url 'event_detail' event.id %}" class="text-blue-500 hover:underline">
+	            {{ event.name }}
+	          </a>
+	        </td>
+	        <td class="px-4 py-3">{{ event.date }} {{ event.time }}</td>
+	        <td class="px-4 py-3">{{ event.location }}</td>
+	        <td class="px-4 py-3">{{ event.category.name }}</td>
+	        <td class="px-4 py-3">{{ event.num_participants }}</td>
+	      </tr>
+	      {% endfor %}
+	    </tbody>
+	  </table>
+	</div>
+	{% else %}
+	  <p class="text-gray-600">No events to display for '{{ user.username }}'.</p>
+	{% endif %}
+	<div class="mt-6">
+	  <a href="{% url 'category_create' %}" class="bg-orange-400 hover:bg-orange-500 text-white px-4 py-2 rounded-4xl">+ Create New Category</a>    
+	</div>
+	<div class="mt-6">
+	  <a href="{% url 'event_create' %}" class="bg-teal-400 hover:bg-teal-500 text-white px-4 py-2 rounded-4xl">+ Create New Event</a>    
+	</div>	
+</section>
 {% endblock %}

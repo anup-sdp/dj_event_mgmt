@@ -13,7 +13,7 @@ from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate, get_user_model
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.decorators import login_required, user_passes_test
-
+from django.contrib.auth.models import Group
 
 def welcome_page(request):
     return render(request, 'welcome-page.html')
@@ -44,19 +44,22 @@ def sign_out(request):
 
 # user/participant views -----------------------------------------------------------------
 
-def participant_list(request):
+def participant_list(request):    
+    qs = User.objects.annotate(num_events=Count('rsvp_events')).prefetch_related('groups')  # changed events to rsvp_events
     # Search users by username, first_name, last_name, or email
-    qs = User.objects.annotate(num_events=Count('rsvp_events'))  # events to rsvp_events ? ----------------------------------------
     query = request.GET.get('q')
     if query:
         qs = qs.filter(Q(username__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query) | Q(email__icontains=query)) 
     users = qs
     return render(request, 'participants/participant_list.html', {'participants': users})
 
+
 def participant_detail(request, pk):
     user = get_object_or_404(User, pk=pk)
-    events = user.events.select_related('category').all()
+    events = user.rsvp_events.select_related('category').all()
+    #events = user.events.select_related('rsvp_events').all()
     return render(request, 'participants/participant_detail.html', {'user': user, 'events': events})
+
 
 def participant_register(request):
     if request.method == 'POST':
@@ -71,6 +74,7 @@ def participant_register(request):
     else:
         form = UserRegistrationForm()
     return render(request, 'participants/participant_register.html', {'form': form, 'title': 'Register'})
+
 
 def activate_user(request, user_id, token):
     try:
@@ -90,20 +94,52 @@ def activate_user(request, user_id, token):
 def participant_update(request, pk):
     user = get_object_or_404(User, pk=pk)
     if request.method == 'POST':
-        form = UserUpdateForm(request.POST, instance=user)
+        #form = UserUpdateForm(request.POST, instance=user) # the form dont have email field so add it.
+        post_data = request.POST.copy()        
+        post_data['email'] = user.email
+        form = UserUpdateForm(post_data, instance=user)        
         if form.is_valid():
             form.save()
-            messages.success(request, "profile updated")
-            return redirect('user_detail', pk=pk)
+            print("profile updated")
+            messages.success(request, "profile updated")            
+            return redirect('participant_list')
+        else:
+            print(form.errors)   # debug
     else:
         form = UserUpdateForm(instance=user)
-    return render(request, 'participants/participant_form.html', {'form': form, 'title': 'Edit Profile'})
+    return render(request, 'participants/participant_update_form.html', {'form': form, 'title': 'Edit Profile'})
+
+
+def update_participant_role(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    
+    if request.method == 'POST':
+        # Process form submission here
+        new_role_id = request.POST.get('role')
+        new_role = get_object_or_404(Group, id=new_role_id)
+        
+        # Clear existing groups and add new role
+        user.groups.clear()
+        user.groups.add(new_role)
+        messages.success(request, f"Role updated for {user.username}")  
+        return redirect('participant_list')
+    
+    # GET request - show role selection form
+    roles = Group.objects.filter(name__in=["Admin", "Organizer", "Participant"])
+    current_role = user.groups.first()
+    
+    return render(request, 'participants/edit_role.html', {
+        'user': user,
+        'roles': roles,
+        'current_role': current_role
+    })
+
 
 def participant_delete(request, pk):
     user = get_object_or_404(User, pk=pk)
     if request.method == 'POST':
         user.delete()
-        messages.info(request, "user deleted!")        
+        messages.info(request, "user account deleted!")        
         return redirect('participant_list')
     return render(request, 'participants/participant_confirm_delete.html', {'participant': user})
 

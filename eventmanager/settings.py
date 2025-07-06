@@ -211,6 +211,7 @@ to use image,
 install pillo, 
 use ImageField in model, 
 in views in post forms initialization include request.FILES, 
+in forms.py keep in fields
 in form.html in form tag use enctype = 'multipart/form-data',
 in settings write MEDIA_URL and MEDIA_ROOT
 in urls add them. urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

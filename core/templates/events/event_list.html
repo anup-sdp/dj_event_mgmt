@@ -10,32 +10,24 @@
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {% for event in events %}
       <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-        <div class="p-6">
-          <h2 class="text-xl font-semibold mb-2">
-            <a href="{% url 'event_detail' event.id %}" class="hover:underline">
-              {{ event.name }}
-            </a>
-          </h2>
-          <p class="text-gray-600 text-sm mb-1">
-            <strong>Date:</strong> {{ event.date }} at {{ event.time }}
-          </p>
-          <p class="text-gray-600 text-sm mb-1">
-            <strong>Location:</strong> {{ event.location }}
-          </p>
-          <p class="text-gray-600 text-sm mb-1">
-            <strong>Category:</strong> {{ event.category.name }}
-          </p>
-          <p class="text-gray-600 text-sm">
-            <strong>Participants:</strong> {{ event.num_participants }}
-          </p>
-        </div>
+		<a href="{% url 'event_detail' event.id %}">
+			<div class="flex">
+				<div class="p-6">
+					<h2 class="text-xl font-semibold mb-2 hover:underline">{{event.name}}</h2>
+					<p class="text-gray-600 text-sm mb-1"><strong>Date:</strong> {{ event.date }} at {{ event.time }}</p>
+					<p class="text-gray-600 text-sm mb-1"><strong>Location:</strong> {{ event.location }}</p>
+					<p class="text-gray-600 text-sm mb-1"><strong>Category:</strong> {{ event.category.name }}</p>
+					<p class="text-gray-600 text-sm"><strong>Participants:</strong> {{ event.num_participants }}</p>
+				</div>
+				<div class="p-3">
+					<img src={{event.asset.url}} alt="event image" class="max-w-full max-h-full object-contain">
+				</div>
+			</div>
+		</a>        
         <div class="px-6 py-4 bg-gray-50 flex justify-end space-x-2">
-          <a href="{% url 'event_update' event.id %}" class="text-yellow-500 hover:text-yellow-700">
-            Edit
-          </a>
-          <a href="{% url 'event_delete' event.id %}" class="text-red-500 hover:text-red-700">
-            Delete
-          </a>
+			<a href="{% url 'event_add_rsvp' event.id %}" class="text-purple-500 hover:text-purple-700 hover:underline">add RSVP</a> 
+			<a href="{% url 'event_update' event.id %}" class="text-yellow-500 hover:text-yellow-700 hover:underline">Edit</a>
+			<a href="{% url 'event_delete' event.id %}" class="text-red-500 hover:text-red-700 hover:underline">Delete</a>
         </div>
       </div>
     {% empty %}

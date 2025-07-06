@@ -5,7 +5,7 @@ from django import forms
 
 
 # Mixin to apply style to form fields
-class StyledFormMixin:
+class StyledFormMixin2:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.apply_styled_widgets()
@@ -64,7 +64,7 @@ class StyledFormMixin:
                     'class': self.default_classes
                 })
 
-class UserRegistrationForm(StyledFormMixin, UserCreationForm):    
+class UserRegistrationForm(StyledFormMixin2, UserCreationForm):    
     email = forms.EmailField(required=True)
     first_name = forms.CharField(max_length=30, required=False)
     last_name = forms.CharField(max_length=30, required=False)
@@ -104,7 +104,7 @@ class UserRegistrationForm(StyledFormMixin, UserCreationForm):
 
 
 
-class UserUpdateForm(StyledFormMixin, forms.ModelForm):
+class UserUpdateForm(StyledFormMixin2, forms.ModelForm):
     # Form for updating user profile (without password)
     email = forms.EmailField(required=True)
     

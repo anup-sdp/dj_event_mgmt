@@ -20,8 +20,9 @@
     <table class="min-w-full bg-white shadow rounded-lg">
       <thead class="bg-gray-100">
         <tr>
-          <th class="px-4 py-2 text-left rounded-tl-lg">Name</th>
+          <th class="px-4 py-2 text-left rounded-tl-lg">Username</th>
           <th class="px-4 py-2 text-left">Email</th>
+		  <th class="px-4 py-2 text-left">Role</th>
           <th class="px-4 py-2 text-left">Events Count</th>
           <th class="px-4 py-2 text-left rounded-tr-lg">Actions</th>
         </tr>
@@ -29,8 +30,14 @@
       <tbody>
         {% for participant in participants %}
         <tr class="border-t border-gray-200">
-          <td class="px-4 py-3">{{ participant.name }}</td>
+          <td class="px-4 py-3">{{ participant.username }}</td>
           <td class="px-4 py-3">{{ participant.email }}</td>
+		  <!-- role -->
+          <td class="px-4 py-3">
+            {% with role=participant.groups.first %}
+              {{ role.name|default:"No Role" }}
+            {% endwith %}
+          </td>
           <td class="px-4 py-3">
             {% if participant.num_events is not None %}
               {{ participant.num_events }}
@@ -39,9 +46,10 @@
             {% endif %}
           </td>
           <td class="px-4 py-3 space-x-2">
-            <a href="{% url 'participant_detail' participant.id %}" class="text-blue-500 hover:underline">View</a>
-            <a href="{% url 'participant_update' participant.id %}" class="text-yellow-500 hover:underline">Edit</a>
-            <a href="{% url 'participant_delete' participant.id %}" class="text-red-500 hover:underline">Delete</a>
+            <a href="{% url 'participant_detail' participant.id %}" class="text-blue-500 text-sm hover:underline">View</a>
+            <a href="{% url 'participant_update' participant.id %}" class="text-yellow-500 text-sm hover:underline">Edit User</a>
+			<a href="{% url 'update_participant_role' participant.id %}" class="text-purple-500 text-sm hover:underline">Edit Role</a>              
+            <a href="{% url 'participant_delete' participant.id %}" class="text-red-500 text-sm hover:underline">Delete</a>
           </td>
         </tr>
         {% endfor %}
