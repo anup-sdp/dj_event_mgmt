@@ -1,7 +1,6 @@
 # Participant, participants to User
 
 from django.shortcuts import render, get_object_or_404, redirect
-
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from .models import Category, Event
@@ -10,9 +9,19 @@ from django.utils import timezone
 from datetime import date, datetime
 from django.db.models import Count, Q
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
+from django.http import Http404
 
 # Create your views here.
+
+def no_permission(request, exception=None): # handle direct access and 403 errors
+    return render(request, 'no_permission.html')
+
+
+def is_in_groups(user):
+    return user.groups.filter(name__in=['Admin', 'Organizer', 'Participant']).exists()
+
+
 def test_home(request):
     context = {
         "name": "Anup Barua"
@@ -23,21 +32,23 @@ def test_home(request):
     return render(request, "test-home.html", context)
 
 
-def no_permission(request):
-    return render(request, 'no_permission.html')
-
-
 # category views -----------------------------------------------------------------
 
+
+@user_passes_test(is_in_groups, login_url='no-permission')
 def category_list(request):    
     categories = Category.objects.annotate(num_events=Count('events'))
     return render(request, 'categories/category_list.html', {'categories': categories})
 
+
+@user_passes_test(is_in_groups, login_url='no-permission')
 def category_detail(request, pk):
     category = get_object_or_404(Category, pk=pk)    
     events = Event.objects.filter(category=category).select_related('category').prefetch_related('participants').all()
     return render(request, 'categories/category_detail.html', {'category': category, 'events': events})
 
+
+@permission_required("core.add_category", login_url='no-permission')
 def category_create(request):
     if request.method == 'POST':
         form = CategoryForm(request.POST)
@@ -49,6 +60,7 @@ def category_create(request):
         form = CategoryForm()
     return render(request, 'categories/category_form.html', {'form': form, 'title': 'Create Category'})
 
+@permission_required("core.change_category", login_url='no-permission')
 def category_update(request, pk):
     category = get_object_or_404(Category, pk=pk)
     if request.method == 'POST':
@@ -61,6 +73,7 @@ def category_update(request, pk):
         form = CategoryForm(instance=category)
     return render(request, 'categories/category_form.html', {'form': form, 'title': 'Edit Category'})
 
+@permission_required("core.delete_category", login_url='no-permission')
 def category_delete(request, pk):
     category = get_object_or_404(Category, pk=pk)
     if request.method == 'POST':
@@ -72,11 +85,12 @@ def category_delete(request, pk):
 
 # event views -----------------------------------------------------------------
 
+@user_passes_test(is_in_groups, login_url='no-permission')
 def event_list(request):    
     events = Event.objects.select_related('category').prefetch_related('participants').annotate(num_participants=Count('participants')).order_by('date')
     return render(request, 'events/event_list.html', {'events': events, 'heading':'All Events'})
 
-@login_required
+@user_passes_test(is_in_groups, login_url='no-permission')
 def event_add_rsvp(request, event_id):    
     event = get_object_or_404(Event, id=event_id)    
     if event.participants.filter(id=request.user.id ).exists():
@@ -89,7 +103,7 @@ def event_add_rsvp(request, event_id):
     return redirect(redirect_url) # redirect back to the previous page   
 
 
-@login_required
+@user_passes_test(is_in_groups, login_url='no-permission')
 def event_remove_rsvp(request, event_id):
     event = get_object_or_404(Event, id=event_id)
     
@@ -146,14 +160,14 @@ def event_search(request):
         'end_date': end_date,
         'results_count': results_count,
         'has_filters': bool(query or start_date or end_date)
-    }
-    
+    }    
     return render(request, 'events/event_list.html', context)
 
 def event_detail(request, pk):
     event = get_object_or_404(Event, pk=pk)
     return render(request, 'events/event_detail.html', {'event': event})
 
+@permission_required("core.add_event", login_url='no-permission')
 def event_create(request):
     if request.method == 'POST':
         form = EventForm(request.POST, request.FILES)
@@ -165,6 +179,8 @@ def event_create(request):
         form = EventForm()
     return render(request, 'events/event_form.html', {'form': form})
 
+
+@permission_required("core.change_event", login_url='no-permission')
 def event_update(request, pk):
     event = get_object_or_404(Event, pk=pk)
     form = EventForm(request.POST or None, request.FILES or None, instance=event)
@@ -174,6 +190,8 @@ def event_update(request, pk):
         return redirect('event_detail', pk=pk)
     return render(request, 'events/event_form.html', {'form': form})
 
+
+@permission_required("core.delete_event", login_url='no-permission')
 def event_delete(request, pk):
     event = get_object_or_404(Event, pk=pk)
     if request.method == 'POST':

@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% block title %}event management - home{% endblock %}
+{% block title %}event management - welcome{% endblock %}
 {% block content %}
-<div>
-	<h1>Event Management Home</h1>
+<div class="min-h-[60vh] ">
+	<h1>Event Management Welcome</h1>
 	<p>Welcome {% if user.is_authenticated %}{{user.username}}, {% else %}Anonymous, {% endif %}to Event Management App</p>
 </div>
 {% endblock content %}

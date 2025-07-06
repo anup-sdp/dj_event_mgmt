@@ -17,5 +17,10 @@ urlpatterns = [
 	path('organizer-dashboard/', views.organizer_dashboard, name='organizer-dashboard'), # organizer dashboard  # http://127.0.0.1:8000/users/organizer-dashboard/
 	path('admin-dashboard/', views.admin_dashboard, name='admin-dashboard'),
 	path('participant-dashboard/', views.participant_dashboard, name='participant-dashboard'),
+
+	path('admin/create-group/', views.create_group, name='create-group'),
+    path('admin/group-list/', views.group_list, name='group-list'),
+	path('groups/delete/<int:group_id>/', views.delete_group, name='delete_group'),
 ]
+
 # users/

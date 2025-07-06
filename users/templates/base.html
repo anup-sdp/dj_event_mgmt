@@ -32,7 +32,7 @@
 				<h1 class="text-2xl font-semibold">Event Management</h1>
 				<div class="hidden lg:flex items-center gap-x-2">
 					<!-- <a href="{% url 'organizer-dashboard' %}" class="px-3 py-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-full text-sm">Dashboard</a> --> <!-- which one -->
-					<a href="{{dashboard_url}}" class="px-3 py-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-full text-sm">My Dashboard</a> 
+					<a href="{{dashboard_url}}" class="px-3 py-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-full text-sm">Dashboard</a> 
 					<a href="{% url 'category_list' %}" class="px-3 py-1 bg-orange-400 hover:bg-orange-500 text-white font-semibold rounded-full text-sm">All Categories</a>
 					<a href="{% url 'event_list' %}" class="px-3 py-1 bg-teal-400 hover:bg-teal-500 text-white font-semibold rounded-full text-sm">All Events</a>					
 				</div>
@@ -68,7 +68,7 @@
 			</nav>			
 			<!-- mobile menu: change content -->
 			<div id="mobile-menu" class="hidden lg:hidden mt-4 gap-2 m-2">
-				<a href="{{dashboard_url}}" class="px-3 py-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-full text-sm">My Dashboard</a> <!-- which dashboard -->
+				<a href="{{dashboard_url}}" class="px-3 py-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-full text-sm">Dashboard</a> <!-- which dashboard -->
 				<a href="{% url 'category_list' %}" class="px-3 py-1 bg-orange-400 hover:bg-orange-500 text-white font-semibold rounded-full text-sm">All Categories</a>
 				<a href="{% url 'event_list' %}" class="px-3 py-1 bg-teal-400 hover:bg-teal-500 text-white font-semibold rounded-full text-sm">All Events</a>				
 				<div class="flex justify-between items-center gap-2 m-2">
@@ -122,7 +122,7 @@
 				{% endfor %}
 			{% endif %}
 		</div>	
-		<div class="min-h-[60vh]">
+		<div class="min-h-[60vh] p-8">
 			{% block content %}
 			<!-- dynamic content -->
 			{% endblock %}

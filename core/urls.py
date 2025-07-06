@@ -5,7 +5,7 @@ from users.views import welcome_page
 
 urlpatterns = [    
 	path('test-home/', views.test_home, name='test-home'),  # http://127.0.0.1:8000/test-home/	
-	path('', welcome_page, name='welcome-page'),  # http://127.0.0.1:8000/welcome-page/
+	path('', welcome_page, name='welcome-page'),  # http://127.0.0.1:8000/
 
 	path('event-list/', views.event_list, name='event_list'),  # list of all events  # http://127.0.0.1:8000/event-list/
 	path('event_search/', views.event_search, name='event_search'),
