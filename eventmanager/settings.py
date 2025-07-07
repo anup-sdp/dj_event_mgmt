@@ -48,8 +48,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
 	"debug_toolbar.middleware.DebugToolbarMiddleware",  # ---
-    'django.middleware.security.SecurityMiddleware',
-	'whitenoise.middleware.WhiteNoiseMiddleware',  # ---
+    'django.middleware.security.SecurityMiddleware',	
+	'whitenoise.middleware.WhiteNoiseMiddleware',  # --- for render
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -166,7 +166,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']    
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # for production
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  # for render
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -198,13 +198,18 @@ DEFAULT_FROM_EMAIL = "event_mgmt_app"
 
 
 # for user account email activation
-FRONTEND_URL = config('FRONTEND_URL', default='http://127.0.0.1:8000')  # development
+#FRONTEND_URL = config('FRONTEND_URL', default='http://127.0.0.1:8000')  # development, 
+FRONTEND_URL = config('FRONTEND_URL', default='https://dj-event-mgmt-assignment-2.onrender.com/')
 # FRONTEND_URL = "http://localhost:3000"  # common for React/Vite
 # FRONTEND_URL = "https://yourapp.com"  # production
 # FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:3000')
 
 
 AUTH_USER_MODEL = 'auth.User'
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/5.0/howto/static-files/
+
 
 
 
