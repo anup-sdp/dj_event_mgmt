@@ -89,37 +89,39 @@ WSGI_APPLICATION = 'eventmanager.wsgi.application'
 # }
 
 # local postgresql
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'eventdb2',  # --------- new created
-        'USER': 'postgres',
-        'PASSWORD': 'mppg',
-        'HOST': 'localhost', 
-		'PORT': '5432',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'eventdb2',  # --------- new created
+#         'USER': 'postgres',
+#         'PASSWORD': 'mppg',
+#         'HOST': 'localhost', 
+# 		'PORT': '5432',
+#     }
+# }
 
-# for supabase
+# for supabase, worked on previous. problem: did not upadate host and got error, new host: aws-0-us-east-1.pooler.supabase.com
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
 #         'NAME': 'postgres', # default in supabase ?
-#         'USER': 'postgres.vsczoxtbwkueitvqzbsb', # default in supabase ? .project_id
+#         'USER': 'postgress.pgwqffehrtjkflmngduq', #f"postgres.{os.getenv('DB_PROJECT_ID')}", # project_id, from setting of project in supabase.
 #         'PASSWORD': os.getenv('DB_PASSWORD'),  # project password
 #         'HOST': 'aws-0-ap-southeast-1.pooler.supabase.com',  # Supabase host, used from Session pooler
 #         'PORT': '5432',
 #     }
 # }
 
+
+# worked
+DATABASES = {
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))  # DATABASE_URL from supabase Session pooler.
+}
+
 # DATABASES = {
 #     'default': dj_database_url.config(
 #         default=config('DATABASE_URL') # --------------------------
 #     )
-# }
-
-# DATABASES = {
-#     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 # }
 
 # DATABASES = {

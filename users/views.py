@@ -184,6 +184,9 @@ def group_list(request):
 @user_passes_test(is_admin, login_url='no-permission')
 def delete_group(request, group_id):
     group = get_object_or_404(Group, id=group_id)
+    if group.name in ["Admin","Organizer","Participant"]:
+        messages.error(request, 'deletion of these groups is phohibitted: "Admin", "Organizer", "Participant"')
+        return redirect('group-list') 
     if request.method == 'POST':
         group.delete()
         messages.success(request, f'The group "{group.name}" has been deleted successfully.')

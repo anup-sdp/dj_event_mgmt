@@ -17,7 +17,7 @@ def send_participant_notification(sender, instance, action, pk_set, **kwargs):
             if user.email:  # Only send if user has an email
                 if action == 'post_add':
                     # Send addition email
-                    subject = f'You have been added to {instance.name}'
+                    subject = f'You have been added to event: {instance.name}'
                     message = f'''Hello {user.first_name or user.username},
 You have been added as a participant to the following event:
 
@@ -45,7 +45,7 @@ Event Management Team'''
                 
                 elif action == 'post_remove':
                     # Send removal email
-                    subject = f'You have been removed from {instance.name}'
+                    subject = f'You have been removed from event: {instance.name}'
                     message = f'''Hello {user.first_name or user.username},
 You have been removed from the following event:
 Event: {instance.name}
