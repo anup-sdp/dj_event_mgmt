@@ -30,4 +30,4 @@ urlpatterns = [
 
 handler403 = no_permission
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # commented because using cloudinary

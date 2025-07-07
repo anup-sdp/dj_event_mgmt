@@ -1,10 +1,12 @@
 # core, signals.py:
-from django.db.models.signals import m2m_changed
+from django.db.models.signals import m2m_changed, pre_save, post_delete
 from django.dispatch import receiver
 from django.core.mail import send_mail
 from django.conf import settings
 from .models import Event
 from django.contrib.auth import get_user_model
+from cloudinary.uploader import destroy
+
 
 @receiver(m2m_changed, sender=Event.participants.through)
 def send_participant_notification(sender, instance, action, pk_set, **kwargs):    
@@ -69,3 +71,35 @@ Event Management Team'''
                         print(f"Removal email sent to {user.email} for event {instance.name}")
                     except Exception as e:
                         print(f"Failed to send removal email to {user.email}: {str(e)}")
+                        
+
+
+# delete event image if event is deleted or image updated.
+@receiver(post_delete, sender=Event)
+def delete_event_image(sender, instance, **kwargs):
+    if instance.asset:
+        
+        destroy(instance.asset.public_id)
+        
+@receiver(post_delete, sender=Event)
+def delete_event_image(sender, instance, **kwargs):
+    if instance.asset:
+        public_id = instance.asset.public_id
+        if public_id != "events_asset/default_img":
+            destroy(public_id)  # Deletes from Cloudinary using the public ID
+            
+
+@receiver(pre_save, sender=Event)
+def delete_old_event_image(sender, instance, **kwargs):
+    if not instance.pk:
+        return  # skip if new instance (no replacement happening)
+
+    try:
+        old_instance = Event.objects.get(pk=instance.pk)
+    except Event.DoesNotExist:
+        return
+
+    if old_instance.asset and old_instance.asset != instance.asset:
+        public_id = old_instance.asset.public_id
+        if public_id != "events_asset/default_img":
+            destroy(public_id)

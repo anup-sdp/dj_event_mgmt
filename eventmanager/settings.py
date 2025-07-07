@@ -1,4 +1,4 @@
-# at Assignment Instructions 2:55
+# event management, assignment 2.
 """
 Django settings for eventmanager project.
 
@@ -44,6 +44,8 @@ INSTALLED_APPS = [
 	"core",
 	"users",
 	"debug_toolbar", # ---
+	'cloudinary',
+    'cloudinary_storage'
 ]
 
 MIDDLEWARE = [
@@ -169,7 +171,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # for production
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  # for render
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# MEDIA_ROOT = BASE_DIR / 'media' # used cloudinary
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -182,7 +184,7 @@ INTERNAL_IPS = ["127.0.0.1",]  # The Debug Toolbar is shown only if your IP addr
 # -----------------------------------------------------------------
 
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://dj-event-mgmt-assignment-2.onrender.com', '.onrender.com']
 
 
 # python-dotenv package installed,  use os.getenv() to read values from .env, eg. 'HOST': os.getenv('DB_HOST', 'localhost'),
@@ -198,7 +200,7 @@ DEFAULT_FROM_EMAIL = "event_mgmt_app"
 
 
 # for user account email activation
-#FRONTEND_URL = config('FRONTEND_URL', default='http://127.0.0.1:8000')  # development, 
+#FRONTEND_URL = config('FRONTEND_URL', default='http://127.0.0.1:8000')  # development, -----------------------------------------------------
 FRONTEND_URL = config('FRONTEND_URL', default='https://dj-event-mgmt-assignment-2.onrender.com/')
 # FRONTEND_URL = "http://localhost:3000"  # common for React/Vite
 # FRONTEND_URL = "https://yourapp.com"  # production
@@ -211,6 +213,20 @@ AUTH_USER_MODEL = 'auth.User'
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 
+# new changes for cloudinary
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY':    config('CLOUDINARY_API_KEY'),
+    'API_SECRET': config('CLOUDINARY_API_SECRET'),
+    # 
+    'USE_FILENAME': True,
+    'UNIQUE_FILENAME': False,
+    'OVERWRITE': True,
+}
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# CLOUDINARY_URL=cloudinary://<API_KEY>:<API_SECRET>@<CLOUD_NAME> # use this in .env replacing by values
 
 
 """
