@@ -201,7 +201,7 @@ DEFAULT_FROM_EMAIL = "event_mgmt_app"
 
 # for user account email activation
 #FRONTEND_URL = config('FRONTEND_URL', default='http://127.0.0.1:8000')  # development, -----------------------------------------------------
-FRONTEND_URL = config('FRONTEND_URL', default='https://dj-event-mgmt-assignment-2.onrender.com/')
+FRONTEND_URL = config('FRONTEND_URL', default='https://dj-event-mgmt-assignment-2.onrender.com')  # removed / from end
 # FRONTEND_URL = "http://localhost:3000"  # common for React/Vite
 # FRONTEND_URL = "https://yourapp.com"  # production
 # FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:3000')
