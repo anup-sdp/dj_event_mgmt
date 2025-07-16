@@ -91,16 +91,16 @@ WSGI_APPLICATION = 'eventmanager.wsgi.application'
 # }
 
 # local postgresql
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'eventdb2',  # --------- new created
-#         'USER': 'postgres',
-#         'PASSWORD': 'mppg',
-#         'HOST': 'localhost', 
-# 		'PORT': '5432',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'eventdb3',  # --------- new created for midterm
+        'USER': 'postgres',
+        'PASSWORD': 'mppg',
+        'HOST': 'localhost', 
+		'PORT': '5432',
+    }
+}
 
 # for supabase, worked on previous. problem: did not upadate host and got error, new host: aws-0-us-east-1.pooler.supabase.com
 # DATABASES = {
@@ -115,10 +115,10 @@ WSGI_APPLICATION = 'eventmanager.wsgi.application'
 # }
 
 
-# worked
-DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))  # DATABASE_URL from supabase Session pooler.
-}
+# worked, remote supabase
+# DATABASES = {
+#     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))  # DATABASE_URL from supabase Session pooler.
+# }
 
 # DATABASES = {
 #     'default': dj_database_url.config(
@@ -200,14 +200,19 @@ DEFAULT_FROM_EMAIL = "event_mgmt_app"
 
 
 # for user account email activation
-#FRONTEND_URL = config('FRONTEND_URL', default='http://127.0.0.1:8000')  # development, -----------------------------------------------------
-FRONTEND_URL = config('FRONTEND_URL', default='https://dj-event-mgmt-assignment-2.onrender.com')  # removed / from end
+# FRONTEND_URL = config('FRONTEND_URL', default='http://127.0.0.1:8000')  # development, -------------------------------
+#FRONTEND_URL = config('FRONTEND_URL', default='https://dj-event-mgmt-assignment-2.onrender.com')
 # FRONTEND_URL = "http://localhost:3000"  # common for React/Vite
 # FRONTEND_URL = "https://yourapp.com"  # production
 # FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:3000')
 
+if DEBUG:
+    FRONTEND_URL = 'http://127.0.0.1:8000'
+else:
+    FRONTEND_URL = config('FRONTEND_URL', default='http://127.0.0.1:8000')
 
-AUTH_USER_MODEL = 'auth.User'
+
+AUTH_USER_MODEL = 'users.CustomUser'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/

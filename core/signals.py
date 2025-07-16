@@ -77,8 +77,7 @@ Event Management Team'''
 # delete event image if event is deleted or image updated.
 @receiver(post_delete, sender=Event)
 def delete_event_image(sender, instance, **kwargs):
-    if instance.asset:
-        
+    if instance.asset:        
         destroy(instance.asset.public_id)
         
 @receiver(post_delete, sender=Event)

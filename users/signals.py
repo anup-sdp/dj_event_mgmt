@@ -34,3 +34,5 @@ def assign_role(sender, instance, created, **kwargs):
         instance.groups.add(user_group)
         #instance.save()  # no need to call, here—the m2m add() is enough
         # Avoid calling save() inside a post_save
+        
+

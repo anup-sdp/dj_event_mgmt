@@ -1,8 +1,9 @@
 from django.db import models
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField  # for image save in cloud
+from django.contrib.auth import get_user_model
 
-# Create your models here. 
+User = get_user_model()
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -20,7 +21,7 @@ class Event(models.Model):
     participants = models.ManyToManyField(User, related_name='rsvp_events', blank=True)  # M2M    # changed events to resvp_events
     #asset = models.ImageField(upload_to='events_asset', blank=True, null=True, default="events_asset/default_img.png")  # needed for assignment 2
     # Replace ImageField with CloudinaryField
-    asset = CloudinaryField('image', folder='events_asset', blank=True, null=True, default='events_asset/default_img.png')
+    asset = CloudinaryField('image', folder='events_midterm', blank=True, null=True, default='events_midterm/default_jb8jxq.png') # 
     class Meta:
         ordering = ['date', 'time']
 
