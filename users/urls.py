@@ -21,6 +21,10 @@ urlpatterns = [
 	path('admin/create-group/', views.create_group, name='create-group'),
     path('admin/group-list/', views.group_list, name='group-list'),
 	path('groups/delete/<int:group_id>/', views.delete_group, name='delete_group'),
+	path('profile/', views.ProfileView.as_view(), name='profile'), # cbv
+	path('edit-profile/', views.EditProfileView.as_view(), name='edit_profile'), # cbv
+	path('password-change/', views.ChangePassword.as_view(), name='password_change'),  # cbv
+
 ]
 
 # users/

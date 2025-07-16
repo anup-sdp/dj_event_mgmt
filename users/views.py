@@ -1,11 +1,11 @@
 # users, views.py:
 from django.shortcuts import render
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from core.models import Category, Event
-from .forms import UserRegistrationForm, UserUpdateForm, CreateGroupForm
+from users.forms import UserRegistrationForm, UserUpdateForm, CreateGroupForm, EditProfileForm, CustomPasswordChangeForm
 from django.utils import timezone
 from datetime import date, datetime
 from django.db.models import Count, Q
@@ -14,6 +14,13 @@ from django.contrib.auth import login, logout, authenticate, get_user_model
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.contrib.auth.models import Group
+from django.contrib.auth import get_user_model
+#
+from django.views.generic import TemplateView, UpdateView, FormView, View
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
+
+User = get_user_model()
 
 def welcome_page(request):
     return render(request, 'welcome-page.html')
@@ -26,6 +33,18 @@ def is_organizer(user):
 
 def is_participant(user):    
     return user.groups.filter(name='Participant').exists()
+
+@login_required
+def dashboard(request):  
+    if is_admin(request.user):
+        return redirect('admin-dashboard')
+    elif is_organizer(request.user):
+        return redirect('organizer-dashboard')
+    elif is_participant(request.user):
+        return redirect('participant-dashboard')
+
+    return redirect('no-permission')
+
 
 def sign_in(request):
     # without using form
@@ -299,3 +318,48 @@ def organizer_dashboard(request):
         'rsvp_events': rsvp_events
     }
     return render(request, 'organizer_dashboard.html', context)
+
+# ---- for midterm -------------------
+
+class ProfileView(TemplateView):  # https://docs.djangoproject.com/en/5.2/ref/class-based-views/base/
+    template_name = 'accounts/profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+
+        context['username'] = user.username
+        context['email'] = user.email
+        context['name'] = user.get_full_name()  # builtin
+        context['bio'] = user.bio
+        context['profile_image'] = user.profile_image
+
+        context['member_since'] = user.date_joined
+        context['last_login'] = user.last_login
+        return context
+    
+
+class EditProfileView(UpdateView):
+    model = User
+    form_class = EditProfileForm
+    template_name = 'accounts/update_profile.html'
+    context_object_name = 'form'
+
+    def get_object(self):
+        return self.request.user
+
+    def form_valid(self, form):
+        form.save()
+        return redirect('profile')
+    
+
+
+class ChangePassword(PasswordChangeView):
+    template_name = 'accounts/password_change.html'
+    form_class = CustomPasswordChangeForm
+    
+
+
+
+
+
