@@ -91,16 +91,16 @@ WSGI_APPLICATION = 'eventmanager.wsgi.application'
 # }
 
 # local postgresql
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'eventdb3',  # --------- new created for midterm
-        'USER': 'postgres',
-        'PASSWORD': 'mppg',
-        'HOST': 'localhost', 
-		'PORT': '5432',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'eventdb3',  # --------- new created for midterm
+#         'USER': 'postgres',
+#         'PASSWORD': 'mppg',
+#         'HOST': 'localhost', 
+# 		'PORT': '5432',
+#     }
+# }
 
 # for supabase, worked on previous. problem: did not upadate host and got error, new host: aws-0-us-east-1.pooler.supabase.com
 # DATABASES = {
@@ -116,9 +116,9 @@ DATABASES = {
 
 
 # worked, remote supabase
-# DATABASES = {
-#     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))  # DATABASE_URL from supabase Session pooler.
-# }
+DATABASES = {
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))  # DATABASE_URL from supabase Session pooler.
+}
 
 # DATABASES = {
 #     'default': dj_database_url.config(
@@ -232,7 +232,11 @@ CLOUDINARY_STORAGE = {
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # CLOUDINARY_URL=cloudinary://<API_KEY>:<API_SECRET>@<CLOUD_NAME> # use this in .env replacing by values
-
+"""
+cloudinary folders:
+for assignment 2: events_asset
+for midterm: events_midterm & profile_images
+"""
 
 
 LOGIN_URL = '/users/sign-in/'
