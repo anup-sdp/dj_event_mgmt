@@ -1,0 +1,133 @@
+
+/* Inter-24pt Regular */
+@font-face {
+	font-family: 'Inter';
+	src: url('../fonts/Inter24pt-Regular.woff2') format('woff2');
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+
+/* Ubuntu Regular */
+@font-face {
+	font-family: 'Ubuntu';			
+	src: url("../fonts/Ubuntu-Regular.woff2") format('woff2');
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+
+/* Raleway Thin Italic */
+@font-face {
+    font-family: 'Raleway';
+    src: url('../fonts/Raleway-ThinItalic.woff2') format('woff2');		        
+    font-weight: 100;
+    font-style: italic;
+    font-display: swap;
+}
+
+html, body {
+			margin: 0;
+			padding: 0;
+			min-height: 100%;
+			min-width: 100%;	
+			/* overflow: hidden;*/
+		}	
+body {
+	background: url('../background/subtle_prism-gray-400.svg') no-repeat center center fixed;
+	background-size: cover;
+}
+
+h1, h2, h3 {
+	font-family: Raleway, sans-serif;
+}
+
+button{
+			cursor: pointer;
+}	
+
+.fade-out {
+	transition: opacity 0.3s ease-out;
+	opacity: 0;
+}
+
+dialog {
+	z-index: 10;
+	background-color: rgba(208, 235, 244, 1);
+	border: 1px solid lightblue;
+	border-radius: 0.8rem;
+}
+
+dialog::backdrop {			
+	background-color: rgba(0, 0, 0, 0.2);
+}
+/* Center the button horizontally */
+dialog button {
+	display: block;
+	margin: 0 auto;
+}
+/* button style: source button 19, https://getcssscan.com/css-buttons-examples */
+.button-19 {
+  appearance: button;
+  background-color: #1899D6;
+  border: solid transparent;
+  border-radius: 16px;
+  border-width: 0 0 4px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  font-family: din-round,sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .8px;
+  line-height: 20px;
+  margin: 0;
+  outline: none;
+  overflow: visible;
+  padding: 13px 16px;
+  text-align: center;
+  /* text-transform: uppercase; */
+  touch-action: manipulation;
+  transform: translateZ(0);
+  transition: filter .2s;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+  /* width: 100%; */
+}
+
+.button-19:after {
+  background-clip: padding-box;
+  background-color: #1CB0F6;
+  border: solid transparent;
+  border-radius: 16px;
+  border-width: 0 0 4px;
+  bottom: -4px;
+  content: "";
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: -1;
+}
+
+.button-19,
+.button-19:focus {
+  user-select: auto;
+}
+
+.button-19:hover:not(:disabled) {
+  filter: brightness(1.1);
+  -webkit-filter: brightness(1.1);
+}
+
+.button-19:disabled {
+  cursor: auto;
+}
+
+.button-19:active {
+  border-width: 4px 0 0;
+  background: none;
+}

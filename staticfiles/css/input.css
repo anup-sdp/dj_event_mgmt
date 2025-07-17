@@ -1,0 +1,12 @@
+/*tailwind input for setup, v4*/
+
+@import "tailwindcss";
+
+/* write config in postcss.config.js: which files to check for tailwind style classes */
+
+/* my optional customizations directly in css
+@theme {
+  --color-primary: #3b82f6;
+  --font-family-display: "Inter", sans-serif;
+}
+*/
