@@ -14,31 +14,32 @@
       Search
     </button>
   </form>
-
-  {% if participants %}
+  {% if participants %}  <!-- here participants == all users -->
   <div class="overflow-x-auto">
     <table class="min-w-full bg-white shadow rounded-lg">
       <thead class="bg-gray-100">
         <tr>
-          <th class="px-4 py-2 text-left rounded-tl-lg">Username</th>
-          <th class="px-4 py-2 text-left">Email</th>
-		  <th class="px-4 py-2 text-left">Role</th>
-          <th class="px-4 py-2 text-left">Events Count</th>
-          <th class="px-4 py-2 text-left rounded-tr-lg">Actions</th>
+          <th class="px-2 py-2 text-left rounded-tl-lg">Username</th>
+		  <th class="px-2 py-2 text-left">Role</th>
+          <th class="px-2 py-2 text-left">Email</th> 
+		  <th class="px-2 py-2 text-left">Phone No</th>
+          <th class="px-2 py-2 text-left">Events Count</th>
+          <th class="px-2 py-2 text-left rounded-tr-lg">Actions</th>
         </tr>
       </thead>
       <tbody>
         {% for participant in participants %}
         <tr class="border-t border-gray-200">
-          <td class="px-4 py-3">{{ participant.username }}</td>
-          <td class="px-4 py-3">{{ participant.email }}</td>
+          <td class="px-2 py-3">{{ participant.username }}</td>          
 		  <!-- role -->
-          <td class="px-4 py-3">
+          <td class="px-2 py-3">
             {% with role=participant.groups.first %}
               {{ role.name|default:"No Role" }}
             {% endwith %}
           </td>
-          <td class="px-4 py-3">
+		  <td class="px-2 py-3">{{ participant.email }}</td>
+		  <td class="px-2 py-3">{{ participant.phone_number | default:"-"}}</td>
+          <td class="px-2 py-3">
             {% if participant.num_events is not None %}
               {{ participant.num_events }}
             {% else %}

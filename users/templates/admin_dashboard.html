@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% block title %}admin dashboard{% endblock %}
 {% block content %}
-<section>
+<section>	
+	<a href="{% url 'profile' %}" class="button-19">My Profile</a>	<!-- button style source: https://getcssscan.com/css-buttons-examples, in style.css -->
 	<h1 class="font-semibold">Admin Dashboard</h1>
 	<div class="mt-4 mb-4">
 		<a href="{% url 'participant_list' %}" class="px-3 py-1 bg-sky-400 hover:bg-sky-500 text-white font-semibold rounded-full text-sm">All Participants</a>

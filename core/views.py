@@ -1,4 +1,4 @@
-# Participant, participants to User
+# Participant, converted participants to User, to CustomUser
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.forms import UserCreationForm
@@ -11,8 +11,11 @@ from django.db.models import Count, Q
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.http import Http404
+#
+from django.views.generic import CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.urls import reverse_lazy
 
-# Create your views here.
 
 def no_permission(request, exception=None): # handle direct access and 403 errors
     return render(request, 'no_permission.html')
@@ -34,7 +37,6 @@ def test_home(request):
 
 # category views -----------------------------------------------------------------
 
-
 @user_passes_test(is_in_groups, login_url='no-permission')
 def category_list(request):    
     categories = Category.objects.annotate(num_events=Count('events'))
@@ -47,7 +49,7 @@ def category_detail(request, pk):
     events = Event.objects.filter(category=category).select_related('category').prefetch_related('participants').all()
     return render(request, 'categories/category_detail.html', {'category': category, 'events': events})
 
-
+"""
 @permission_required("core.add_category", login_url='no-permission')
 def category_create(request):
     if request.method == 'POST':
@@ -59,7 +61,27 @@ def category_create(request):
     else:
         form = CategoryForm()
     return render(request, 'categories/category_form.html', {'form': form, 'title': 'Create Category'})
+"""
 
+# cbv
+class CategoryCreateView(PermissionRequiredMixin, CreateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = 'categories/category_form.html'
+    permission_required = 'core.add_category'
+    login_url = 'no-permission'
+    success_url = reverse_lazy('category_list')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Create Category'
+        return context
+    
+    def form_valid(self, form):
+        messages.success(self.request, "new category created")
+        return super().form_valid(form)
+
+"""
 @permission_required("core.change_category", login_url='no-permission')
 def category_update(request, pk):
     category = get_object_or_404(Category, pk=pk)
@@ -72,7 +94,30 @@ def category_update(request, pk):
     else:
         form = CategoryForm(instance=category)
     return render(request, 'categories/category_form.html', {'form': form, 'title': 'Edit Category'})
+"""
 
+# cbv
+class CategoryUpdateView(PermissionRequiredMixin, UpdateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = 'categories/category_form.html'
+    permission_required = 'core.change_category'
+    login_url = 'no-permission'
+    context_object_name = 'category'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Edit Category'
+        return context
+    
+    def form_valid(self, form):
+        messages.success(self.request, "category updated")
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse_lazy('category_detail', kwargs={'pk': self.object.pk})
+
+"""
 @permission_required("core.delete_category", login_url='no-permission')
 def category_delete(request, pk):
     category = get_object_or_404(Category, pk=pk)
@@ -81,7 +126,20 @@ def category_delete(request, pk):
         messages.info(request, "category deleted!")
         return redirect('category_list')
     return render(request, 'categories/category_confirm_delete.html', {'category': category})
+"""
 
+# cbv
+class CategoryDeleteView(PermissionRequiredMixin, DeleteView):
+    model = Category
+    template_name = 'categories/category_confirm_delete.html'
+    permission_required = 'core.delete_category'
+    login_url = 'no-permission'
+    success_url = reverse_lazy('category_list')
+    context_object_name = 'category'
+    
+    def form_valid(self, form):
+        messages.info(self.request, "category deleted!")
+        return super().form_valid(form)
 
 # event views -----------------------------------------------------------------
 

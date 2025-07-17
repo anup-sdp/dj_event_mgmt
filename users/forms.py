@@ -116,7 +116,7 @@ class UserUpdateForm(StyledFormMixin2, forms.ModelForm):
     
     class Meta:
         model = User
-        fields = ['username', 'email', 'first_name', 'last_name']
+        fields = ['username', 'email', 'first_name', 'last_name', 'phone_number']
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -125,6 +125,7 @@ class UserUpdateForm(StyledFormMixin2, forms.ModelForm):
         self.fields['email'].widget.attrs['placeholder'] = 'Email address'
         self.fields['first_name'].widget.attrs['placeholder'] = 'First name'
         self.fields['last_name'].widget.attrs['placeholder'] = 'Last name'
+        self.fields['phone_number'].widget.attrs['placeholder'] = 'Phone Number'
         
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -154,7 +155,7 @@ class CreateGroupForm(StyledFormMixin, forms.ModelForm):
 class EditProfileForm(StyledFormMixin, forms.ModelForm):
     class Meta:
         model = User
-        fields = ['email', 'first_name', 'last_name', 'bio', 'profile_image']
+        fields = ['email', 'first_name', 'last_name', 'phone_number', 'bio', 'profile_image']
 
     
 class CustomPasswordChangeForm(StyledFormMixin, PasswordChangeForm):
@@ -165,4 +166,5 @@ class CustomPasswordResetForm(StyledFormMixin, PasswordResetForm):
 
 class CustomPasswordResetConfirmForm(StyledFormMixin, SetPasswordForm):
     pass
+
 

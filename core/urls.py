@@ -17,8 +17,14 @@ urlpatterns = [
 	path('<int:event_id>/remove_rsvp/', views.event_remove_rsvp, name='event_remove_rsvp'),
 
 	path('categories/', views.category_list, name='category_list'),  # http://127.0.0.1:8000/categories/
-    path('categories/create/', views.category_create, name='category_create'),
+    #path('categories/create/', views.category_create, name='category_create'),
+    path('categories/create/', views.CategoryCreateView.as_view(), name='category_create'),
     path('categories/<int:pk>/', views.category_detail, name='category_detail'),
-    path('categories/<int:pk>/update/', views.category_update, name='category_update'),
-    path('categories/<int:pk>/delete/', views.category_delete, name='category_delete'),	
+    #path('categories/<int:pk>/update/', views.category_update, name='category_update'),
+    path('categories/<int:pk>/update/', views.CategoryUpdateView.as_view(), name='category_update'),
+    #path('categories/<int:pk>/delete/', views.category_delete, name='category_delete'),
+    path('categories/<int:pk>/delete/', views.CategoryDeleteView.as_view(), name='category_delete'),
 ]
+# converted old fbv to cbv: CategoryCreateView, CategoryUpdateView, CategoryDeleteView
+
+# core/

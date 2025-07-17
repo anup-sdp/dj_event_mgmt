@@ -2,6 +2,7 @@
 {% block title %}participant dashboard{% endblock %}
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+	<a href="{% url 'profile' %}" class="button-19">My Profile</a>	<!-- button style source: https://getcssscan.com/css-buttons-examples, in style.css -->
 	<h1>Participant Dashboard</h1>
 	<h2 class="text-3xl font-bold text-gray-900 mb-6">My RSVP Events:</h2>  
   {% if events %}
@@ -17,8 +18,7 @@
           <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
             {{ event.participants.count }} attending
           </span>
-        </div>
-        
+        </div>        
         <p class="mt-2 text-gray-600">{{ event.description|truncatewords:20 }}</p>
         
         <div class="mt-4 grid grid-cols-2 gap-2">

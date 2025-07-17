@@ -234,6 +234,12 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 # CLOUDINARY_URL=cloudinary://<API_KEY>:<API_SECRET>@<CLOUD_NAME> # use this in .env replacing by values
 
 
+
+LOGIN_URL = '/users/sign-in/'
+
+LOGIN_REDIRECT_URL = '/users/dashboard/'
+LOGOUT_REDIRECT_URL = '/'
+
 """
 to use image,
 install pillo, 
