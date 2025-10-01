@@ -24,6 +24,7 @@ from django.urls import reverse_lazy
 User = get_user_model()
 
 def welcome_page(request):
+    print("in welcome page")
     return render(request, 'welcome-page.html')
 
 def is_admin(user):    

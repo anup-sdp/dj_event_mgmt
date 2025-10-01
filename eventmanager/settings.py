@@ -1,4 +1,4 @@
-# event management, assignment 2.
+# event management, assignment 2. + midterm
 """
 Django settings for eventmanager project.
 
